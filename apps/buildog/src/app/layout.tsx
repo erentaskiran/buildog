@@ -20,8 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     Auth.onAuthenticationChange((eventMessage) => {
-      if (eventMessage === "authentication_failed") {
-        if (pathname !== "/") router.push("/login");
+      if ( pathname !== "/signup/" && eventMessage === "authentication_failed") {
+        if (pathname !== "/" ) router.push("/login");
       }
     });
 

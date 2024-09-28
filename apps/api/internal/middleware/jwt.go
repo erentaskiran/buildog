@@ -29,12 +29,12 @@ func EnsureValidToken(next http.Handler) http.Handler {
 
 		err = firebase.InitFirebase()
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, "firebase can't initialized", http.StatusInternalServerError)
 			return
 		}
 
 		_, err = firebase.VerifyIDToken(token)
-		if err != nil {
+		if err == nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}

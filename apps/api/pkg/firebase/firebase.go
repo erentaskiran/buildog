@@ -75,10 +75,10 @@ func UpdateUser(uid, email, password string) error {
 	return nil
 }
 
-func CreateUserWithEmail(email, password string) error {
+func CreateUserWithEmail(email, password string) (string, error) {
 	authClient, err := GetAuthClient()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	params := (&auth.UserToCreate{}).
@@ -86,22 +86,9 @@ func CreateUserWithEmail(email, password string) error {
 		EmailVerified(true).
 		Password(password)
 
-	_, err = authClient.CreateUser(context.Background(), params)
+	userRecord, err := authClient.CreateUser(context.Background(), params)
 	if err != nil {
-		return fmt.Errorf("error creating user: %v", err)
+		return "", fmt.Errorf("error creating user: %v", err)
 	}
-	return nil
-}
-
-func GetUserByEmail(email string) (*auth.UserRecord, error) {
-	authClient, err := GetAuthClient()
-	if err != nil {
-		return nil, err
-	}
-
-	userRecord, err := authClient.GetUserByEmail(context.Background(), email)
-	if err != nil {
-		return nil, fmt.Errorf("error getting user: %v", err)
-	}
-	return userRecord, nil
+	return userRecord.UserInfo.UID, nil
 }

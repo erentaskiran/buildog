@@ -54,20 +54,14 @@ func (a *api) addUserToOrganization(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				err = firebase.CreateUserWithEmail(payload.Email, password)
-				if err != nil {
-					utils.JSONError(w, http.StatusInternalServerError, err.Error())
-					return
-				}
-
-				firebaseUser, err := firebase.GetUserByEmail(payload.Email)
+				UID, err := firebase.CreateUserWithEmail(payload.Email, password)
 				if err != nil {
 					utils.JSONError(w, http.StatusInternalServerError, err.Error())
 					return
 				}
 
 				newUser := &models.User{
-					Id:        firebaseUser.UID,
+					Id:        UID,
 					FirstName: "Unknown",
 					LastName:  "Unknown",
 					Email:     payload.Email,

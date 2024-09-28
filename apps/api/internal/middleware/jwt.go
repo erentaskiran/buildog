@@ -27,8 +27,14 @@ func EnsureValidToken(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), "tokenClaims", tokenClaims)
 		r = r.WithContext(ctx)
 
+		err = firebase.InitFirebase()
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
 		_, err = firebase.VerifyIDToken(token)
-		if err == nil {
+		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}

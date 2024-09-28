@@ -16,7 +16,7 @@ func SendEmail(recipient, password string, cfg *aws.Config) error {
 	sendEmailCredentials := &models.SendEmailCredentials{
 		Sender:    os.Getenv("SES_MESSAGE_SENDER_EMAIL"),
 		Recipient: recipient,
-		Subject:   "asdasdasdasd",
+		Subject:   "dummy subject",
 		HtmlBody: "<h1 style='color:blue'>Amazon SES Test Email (AWS SDK for Go)</h1><p>This email was sent with " +
 			"<a href='https://aws.amazon.com/ses/'>Amazon SES</a> using the " +
 			"<a href='https://aws.amazon.com/sdk-for-go/'>AWS SDK for Go</a>.</p>" +

@@ -7,24 +7,27 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/gorilla/mux"
 )
 
 type api struct {
-	db *database.DB
+	db  *database.DB
+	cfg aws.Config
 
 	organizationsRepo     *repository.OrganizationRepository
 	organizationUsersRepo *repository.OrganizationUserRepository
 	userRepo              *repository.UserRepository
 }
 
-func NewApi(db *database.DB) (*api, error) {
+func NewApi(db *database.DB, cfg aws.Config) (*api, error) {
 	organizationRepo := repository.NewOrganizationRepository(db)
 	organizationUserRepo := repository.NewOrganizationUserRepository(db)
 	userRepo := repository.NewUserRepository(db)
 
 	return &api{
-		db: db,
+		db:  db,
+		cfg: cfg,
 
 		organizationsRepo:     organizationRepo,
 		organizationUsersRepo: organizationUserRepo,

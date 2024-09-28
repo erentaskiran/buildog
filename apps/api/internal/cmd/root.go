@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/joho/godotenv"
 )
 
@@ -25,7 +26,12 @@ func Execute() error {
 	}
 	defer db.Close()
 
-	api, _ := api.NewApi(db)
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+	if err != nil {
+		return fmt.Errorf("AWS config yüklenemedi: %v", err)
+	}
+
+	api, _ := api.NewApi(db, cfg)
 	srv := api.Server(port)
 
 	serverErrors := make(chan error, 1)
